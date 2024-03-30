@@ -1,5 +1,6 @@
 package com.coderscampus.miriamassignment14.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,21 @@ public class UserService {
 	@Transactional(readOnly = true)
 	public Optional<User> findById(Long id) {
 		return userRepository.findById(id);
+	}
+	
+	@Transactional(readOnly = true)
+	public List<User> findAll() {
+		return userRepository.findAll();
+	}
+	
+	@Transactional
+	public User save(User user) {
+		return userRepository.save(user);
+	}
+	
+	@Transactional
+	public void deleteById(Long id) {
+		userRepository.deleteById(id);
 	}
 
 }
