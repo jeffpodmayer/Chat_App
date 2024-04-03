@@ -39,4 +39,9 @@ public class UserService {
 		userRepository.deleteById(id);
 	}
 
+	@Transactional(readOnly = true)
+	public Optional<User> findByUsername(String username) {
+		return userRepository.findByUsername(username);
+	}
+
 }

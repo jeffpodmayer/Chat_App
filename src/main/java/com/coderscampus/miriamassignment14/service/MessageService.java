@@ -43,4 +43,9 @@ public class MessageService {
 	public void deleteById(Long id) {
 		messageRepository.deleteById(id);
 	}
+
+	@Transactional(readOnly = true)
+	public List<Message> findMessagesByChannelId(Long channelId) {
+		return messageRepository.findByChannelId(channelId);
+	}
 }
