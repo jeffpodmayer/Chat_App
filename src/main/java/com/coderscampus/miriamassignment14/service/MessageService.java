@@ -22,7 +22,7 @@ public class MessageService {
 	}
 	
 	@Transactional(readOnly = true)
-	public Optional<Message> fidById(Long id) {
+	public Optional<Message> findById(Long id) {
 		return messageRepository.findById(id);
 		
 	}
