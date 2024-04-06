@@ -10,7 +10,7 @@
             <p th:text="${message.content}">Message content</p>
             </div>
         </div>
-        <form action="#" th:action="@{/channels/{channelId}/messages(channelId=${channel.id})}" method="post">
+        <form id="messageForm" action="#" th:action="@{/channels/{channelId}/messages(channelId=${channel.id})}" method="post">
             <input type="text" name="messageContent" required>
             <button type="submit">Send</button>
         </form>

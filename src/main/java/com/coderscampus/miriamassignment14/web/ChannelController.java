@@ -38,6 +38,14 @@ public class ChannelController {
 		return "channel";
 	}
 	
+	@GetMapping("/channels")
+	public String showChannels(Model model) {
+	    List<Channel> channels = channelService.findAll();
+	    model.addAttribute("channels", channels);
+	    return "channels";
+	}
+
+	
 	
 
 }
