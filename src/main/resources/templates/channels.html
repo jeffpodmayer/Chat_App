@@ -12,6 +12,11 @@
             <a th:href="@{/channels/{id}(id=${channel.id})}" th:text="${channel.name}">Channel Name</a>
         </li>
     </ul>
+    <form id="createChannelForm" action="#" method="post">
+        <label for="channelName">Channel Name</label>
+        <input type="text" id="channelName" name="channelName" required>
+        <button type="submit">Create Channel</button>
+    </form>
     <script type="text/javascript" src="/js/welcome.js"></script>
 </body>
 </html>

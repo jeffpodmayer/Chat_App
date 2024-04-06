@@ -8,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.coderscampus.miriamassignment14.domain.Channel;
@@ -43,6 +45,16 @@ public class ChannelController {
 	    List<Channel> channels = channelService.findAll();
 	    model.addAttribute("channels", channels);
 	    return "channels";
+	}
+	
+	@PostMapping("/channels/create")public String createChannel(@RequestParam String channelName, RedirectAtributes redirectAttributes) {
+		Channel newChannel = new Channel();
+		newChannel.setName(channelName);
+		Channel savedChannel = channelService.save(newChannel);
+		
+		redirectAttributes.addFlashAttribute("successMessage", "Channel '" + channelName + "' created successfully");
+		
+		return "redirect:/channels";
 	}
 
 	
