@@ -5,12 +5,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.coderscampus.miriamassignment14.domain.Channel;
 import com.coderscampus.miriamassignment14.domain.Message;
 import com.coderscampus.miriamassignment14.domain.User;
+import com.coderscampus.miriamassignment14.dto.MessageDTO;
 import com.coderscampus.miriamassignment14.service.ChannelService;
 import com.coderscampus.miriamassignment14.service.MessageService;
 
@@ -29,11 +30,11 @@ public class MessageController {
 	}
 	
 	@PostMapping("/channels/{channelId}/messages")
-	public String postMessage(@PathVariable Long channelId, @RequestParam String messageContent, HttpSession session) {
+	public String postMessage(@PathVariable Long channelId, @RequestBody MessageDTO messageDTO, HttpSession session) {
 		User user = (User) session.getAttribute("user");
 		Channel channel = channelService.findById(channelId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Channel not found"));
 		Message message = new Message();
-		message.setContent(messageContent);
+		message.setContent(messageDTO.getContent());
 		message.setUser(user);
 		message.setChannel(channel);
 		messageService.save(message);
