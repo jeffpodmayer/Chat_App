@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
           newChannelElement.textContent = data.name
         })
         .catch((error) => {
-          console.error("Error  creating channel: ", error)
+          console.error("Error creating channel: ", error)
         })
     })
   }

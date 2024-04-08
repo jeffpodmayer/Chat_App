@@ -48,15 +48,15 @@ public class ChannelController {
 	    return "channels";
 	}
 	
-//	@PostMapping("/channels/create")public String createChannel(@RequestParam String channelName, RedirectAttributes redirectAttributes) {
-//		Channel newChannel = new Channel();
-//		newChannel.setName(channelName);
-//		Channel savedChannel = channelService.save(newChannel);
-//		
-//		redirectAttributes.addFlashAttribute("successMessage", "Channel '" + channelName + "' created successfully");
-//		
-//		return "redirect:/channels";
-//	}
+	@PostMapping("/channels/create")public String createChannel(@RequestParam String channelName, RedirectAttributes redirectAttributes) {
+		Channel newChannel = new Channel();
+		newChannel.setName(channelName);
+		Channel savedChannel = channelService.save(newChannel);
+		
+		redirectAttributes.addFlashAttribute("successMessage", "Channel '" + channelName + "' created successfully");
+		
+		return "redirect:/channels";
+	}
 
 	
 	
