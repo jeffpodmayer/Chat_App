@@ -34,6 +34,7 @@ public class ChannelController {
 	public String viewChannel(@PathVariable Long channelId, Model model) {
 		Channel channel = channelService.findById(channelId)
 										.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Channel not found"));
+//		System.out.println("Channel Name: " + channel.getName()); // For debugging
 		List<Message> messages = messageService.findMessagesByChannelId(channelId);
 		model.addAttribute("channel", channel);
 		model.addAttribute("messages", messages);
