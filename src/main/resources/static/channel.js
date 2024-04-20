@@ -23,10 +23,17 @@ document.addEventListener("DOMContentLoaded", function () {
     fetchMessages(channelId);
   }
 
+  //for debugging
+  document.addEventListener("DOMContentLoaded", function () {
+    console.log("DOM fully loaded and parsed")
+    const messageForm = document.getElementById("messageForm");
+    console.log("Message Form:", messageForm)
+
   if (messageForm) {
     messageForm.addEventListener("submit", function (event) {
       event.preventDefault();
       const messageContent = document.getElementById("messageContent").value;
+      console.log("Message Input:", messageContent);
 
       fetch(`/api/messages/createMessage`, {
         method: "POST",
