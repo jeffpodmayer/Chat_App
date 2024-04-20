@@ -36,7 +36,7 @@ public class MessageApiController {
 		this.channelService = channelService;
 	}
 
-	@PostMapping("/createMessage")
+	@PostMapping(path = "/createMessage", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<?> createMessage(@RequestBody MessageDTO messageDTO, HttpSession session) {
 		User user = (User) session.getAttribute("user");
 		if (user == null) {
