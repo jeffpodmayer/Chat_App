@@ -8,14 +8,6 @@
         <h1 th:text="${channel.name}">Channel name</h1>
         <div id="messagesContainer">
         </div>
-
-        </div>
-        <form id="messageForm" action="#" th:action="@{/channels/{channelId}/messages(channelId=${channel.id})}" method="post">
-            <input type="text" name="messageContent" required>
-            <button type="submit">Send</button>
-        </form>
-        <script src="/js/channel.js"></script>
-
         <!-- <form id="messageForm" action="#" th:action="@{/channels/{channelId}/messages(channelId=${channel.id})}" method="post"> -->
         <form action="#"></form>
             <input type="text" id="messageContent" name="messageContent" required>

@@ -47,22 +47,32 @@ if (messageForm) {
     const messageContent = document.getElementById("messageContent").value;
     console.log("Message Input:", messageContent);
 
-    fetch(`/api/messages/createMessage`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        content: messageContent,
-        channelId: channelId,
-      }),
-    }).then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      console.log(response);
-      return response.json();
-    });
+    const messageElement = document.createElement("div");
+    messageElement.textContent = messageContent;
+
+    // Append the message element to the message container
+    const messageContainer = document.getElementById("messagesContainer");
+    messageContainer.appendChild(messageElement);
+
+    // Clear the input field after submitting the message
+    document.getElementById("messageContent").value = "";
+
+    // fetch(`/api/messages/createMessage`, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     content: messageContent,
+    //     channelId: channelId,
+    //   }),
+    // }).then((response) => {
+    //   if (!response.ok) {
+    //     throw new Error("Network response was not ok");
+    //   }
+    //   console.log(response);
+    //   return response.json();
+    // });
     // .then(() => {
     //   console.log(`Message posted: ${messageContent}`);
     //   document.getElementById("messageContent").value = "";
