@@ -1,10 +1,10 @@
-document.addEventListener("DOMContentLoaded", function() {
-    const joinForm = document.getElementById("joinForm")
+const addUser = document.getElementById("addUser");
 
-    joinForm.addEventListener('submit', function(event) {
-        event.preventDefault()
-        const username = document.getElementById('username').value
-        sessionStorage.setItem('username', username)
-        window.location.href = '/channels'
-    })
-})
+addUser.addEventListener("click", function () {
+  const username = document.getElementById("username").value;
+  console.log(username);
+  sessionStorage.setItem("username", username);
+  //   window.location.href = "/channels";
+});
+
+// document.addEventListener("DOMContentLoaded", function () {});

@@ -4,9 +4,9 @@
         <title>Channel</title>
     </head>
     <body>
+        <input id="channelId" type="hidden" th:value="${channelId}"/>
         <h1 th:text="${channel.name}">Channel name</h1>
         <div id="messagesContainer">
-
         </div>
 
         </div>
@@ -16,5 +16,11 @@
         </form>
         <script src="/js/channel.js"></script>
 
+        <!-- <form id="messageForm" action="#" th:action="@{/channels/{channelId}/messages(channelId=${channel.id})}" method="post"> -->
+        <form action="#"></form>
+            <input type="text" id="messageContent" name="messageContent" required>
+            <button id="messageForm" type="button">Send</button>
+        </form>
+        <script src="/channel.js"></script>
     </body>
 </html>

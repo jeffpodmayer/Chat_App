@@ -28,13 +28,10 @@ public class UserController {
 	}
 	
 	@PostMapping("/setUser")
-	public String setUser(@RequestParam String username, HttpSession session) {
+	public String setUser(@RequestParam String username) {
 		User user = userService.findByUsername(username).orElse(new User());
 		user.setUsername(username);
-		user = userService.save(user);
-		
-		session.setAttribute("user", user);
-		
+		userService.save(user);
 		return "redirect:/channels";
 		
 	}
