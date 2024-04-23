@@ -6,24 +6,21 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.coderscampus.miriamassignment14.domain.Channel;
 import com.coderscampus.miriamassignment14.domain.Message;
-import com.coderscampus.miriamassignment14.domain.User;
 import com.coderscampus.miriamassignment14.dto.MessageDTO;
 import com.coderscampus.miriamassignment14.service.ChannelService;
 import com.coderscampus.miriamassignment14.service.MessageService;
 
-import jakarta.servlet.http.HttpSession;
-
-@RestController
+@Controller
 @RequestMapping("/api/messages")
 public class MessageApiController {
 
@@ -36,24 +33,44 @@ public class MessageApiController {
 		this.channelService = channelService;
 	}
 
-	@PostMapping(path = "/createMessage", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<?> createMessage(@RequestBody MessageDTO messageDTO, HttpSession session) {
-		User user = (User) session.getAttribute("user");
-		if (user == null) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not logged in");
-		}
+//	@PostMapping("/createMessage/${channelId}")
+//	public ResponseEntity<Message> createMessage(@RequestBody MessageDTO messageDTO, HttpSession session) {
+//		User user = (User) session.getAttribute("user");
+//		if (user == null) {
+//			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not logged in");
+//		}
+//
+//		Channel channel = channelService.findById(messageDTO.getChannelId())
+//				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Channel not found"));
+//
+//		Message message = new Message();
+//		message.setContent(messageDTO.getContent());
+//		message.setChannel(channel);
+//		message.setUser(user);
+//
+//		messageService.save(message);
+//
+//		return ResponseEntity.ok().body("Message posted successfully");
+//	}
+	
+	@PostMapping("/createMessage/{channelId}")
+	public ResponseEntity<Message> createMessage(@RequestBody Message message, @PathVariable Long channelId) {
+//		User user = (User) session.getAttribute("user");
+//		if (user == null) {
+//			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not logged in");
+//		}
 
-		Channel channel = channelService.findById(messageDTO.getChannelId())
+		Channel channel = channelService.findById(channelId)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Channel not found"));
 
-		Message message = new Message();
-		message.setContent(messageDTO.getContent());
-		message.setChannel(channel);
-		message.setUser(user);
-
+		Message newMessage = new Message();
+		newMessage.setContent(message.getContent());
+////		newMessage.setChannel(channelId);
+////		message.setUser(user);
+		System.out.println(message);
 		messageService.save(message);
-
-		return ResponseEntity.ok().body("Message posted successfully");
+		
+		return ResponseEntity.status(HttpStatus.CREATED).body(message);
 	}
 
 	@GetMapping("/channels/{channelId}/messages")
