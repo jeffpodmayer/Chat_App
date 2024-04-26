@@ -65,8 +65,8 @@ public class MessageApiController {
 
 		Message newMessage = new Message();
 		newMessage.setContent(message.getContent());
-////		newMessage.setChannel(channelId);
-////		message.setUser(user);
+		newMessage.setChannel(channel);
+//		newMessage.setUser(channel.getUsers());
 		System.out.println(message);
 		messageService.save(message);
 		

@@ -1,7 +1,5 @@
 package com.coderscampus.miriamassignment14.domain;
 
-import java.time.LocalDateTime;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,19 +22,17 @@ public class Message {
 	@JoinColumn(name = "channel_id", nullable = false)
 	private Channel channel;
 
-	private LocalDateTime timestamp;
-
 	public Message() {
 		super();
 	}
 
-	public Message(Long id, String content, User user, Channel channel, LocalDateTime timestamp) {
+	public Message(Long id, String content, User user, Channel channel) {
 		super();
 		this.id = id;
 		this.content = content;
 		this.user = user;
 		this.channel = channel;
-		this.timestamp = timestamp;
+		
 	}
 
 	public Long getId() {
@@ -71,11 +67,4 @@ public class Message {
 		this.channel = channel;
 	}
 
-	public LocalDateTime getTimestamp() {
-		return timestamp;
-	}
-
-	public void setTimestamp(LocalDateTime timestamp) {
-		this.timestamp = timestamp;
-	}
 }

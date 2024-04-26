@@ -1,9 +1,10 @@
 const username=sessionStorage.getItem('username');
 const channelIdInput = document.getElementById('channelId');
 const channelId = channelIdInput.value;
+
 const btnSendMessage = document.getElementById('sendMessage');
 console.log(username)
-console.log(channelId.value)
+console.log(channelId)
 // document.addEventListener("DOMContentLoaded", function () {
 //   const messageForm = document.getElementById("messageForm");
 //   let channelId = document.getElementById("channelId")
@@ -39,16 +40,24 @@ console.log(channelId.value)
     btnSendMessage.addEventListener("click", function (event) {
       event.preventDefault();
       const messageContent = document.getElementById("messageContent").value;
-      console.log("Message Input:", messageContent);
+      // console.log("Message Input:", messageContent);
+      let message = {
+        user: {
+          username: username
+        },
+        content: messageContent,
+        channel: channelId
 
+      };
+      console.log("Message Output:", message);
+    });
       fetch(`/api/messages/createMessage/${channelId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          content: messageContent,
-          // channelId: channelId,
+          message
         }),
       })
         .then((response) => {
@@ -63,11 +72,11 @@ console.log(channelId.value)
         //   document.getElementById("messageContent").value = "";
         //   fetchMessages(channelId);
         // })
-        .catch((error) => {
-          console.error("Error posting message: ", error);
-        });
-    });
-  // }
+    //     .catch((error) => {
+    //       console.error("Error posting message: ", error);
+    //     });
+    // });
+    // )}
 
 //   const createChannelForm = document.getElementById("createChannelForm");
 
