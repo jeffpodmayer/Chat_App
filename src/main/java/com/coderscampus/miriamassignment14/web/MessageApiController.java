@@ -33,45 +33,40 @@ public class MessageApiController {
 		this.channelService = channelService;
 	}
 
-//	@PostMapping("/createMessage/${channelId}")
-//	public ResponseEntity<Message> createMessage(@RequestBody MessageDTO messageDTO, HttpSession session) {
-//		User user = (User) session.getAttribute("user");
-//		if (user == null) {
-//			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not logged in");
-//		}
-//
-//		Channel channel = channelService.findById(messageDTO.getChannelId())
-//				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Channel not found"));
-//
-//		Message message = new Message();
-//		message.setContent(messageDTO.getContent());
-//		message.setChannel(channel);
-//		message.setUser(user);
-//
-//		messageService.save(message);
-//
-//		return ResponseEntity.ok().body("Message posted successfully");
-//	}
-	
 	@PostMapping("/createMessage/{channelId}")
-	public ResponseEntity<Message> createMessage(@RequestBody Message message, @PathVariable Long channelId) {
-//		User user = (User) session.getAttribute("user");
-//		if (user == null) {
-//			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not logged in");
-//		}
-
+	public ResponseEntity<Message> createMessage(@PathVariable Long channelId, @RequestBody Message message) {
 		Channel channel = channelService.findById(channelId)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Channel not found"));
 
 		Message newMessage = new Message();
 		newMessage.setContent(message.getContent());
 		newMessage.setChannel(channel);
-//		newMessage.setUser(channel.getUsers());
-		System.out.println(message);
-		messageService.save(message);
-		
-		return ResponseEntity.status(HttpStatus.CREATED).body(message);
+		newMessage.setUser(message.getUser());
+
+		Message savedMessage = messageService.save(newMessage);
+
+		return ResponseEntity.ok(savedMessage);
 	}
+	
+//	@PostMapping("/createMessage/{channelId}")
+//	public ResponseEntity<Message> createMessage(@RequestBody Message message, @PathVariable Long channelId) {
+////		User user = (User) session.getAttribute("user");
+////		if (user == null) {
+////			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not logged in");
+////		}
+//
+//		Channel channel = channelService.findById(channelId)
+//				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Channel not found"));
+//
+//		Message newMessage = new Message();
+//		newMessage.setContent(message.getContent());
+//		newMessage.setChannel(channel);
+////		newMessage.setUser(channel.getUsers());
+//		System.out.println(message);
+//		messageService.save(message);
+//
+//		return ResponseEntity.status(HttpStatus.CREATED).body(message);
+//	}
 
 	@GetMapping("/channels/{channelId}/messages")
 	public ResponseEntity<List<MessageDTO>> getMessages(@PathVariable Long channelId) {

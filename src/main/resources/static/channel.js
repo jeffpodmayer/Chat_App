@@ -1,10 +1,15 @@
-const username=sessionStorage.getItem('username');
-const channelIdInput = document.getElementById('channelId');
+const username = sessionStorage.getItem("username");
+const userIdInput = document.getElementById("userId");
+const userId = userIdInput.value;
+const channelIdInput = document.getElementById("channelId");
 const channelId = channelIdInput.value;
+const channelNameInput = document.getElementById("channelName");
+const channelName = channelNameInput.value;
 
-const btnSendMessage = document.getElementById('sendMessage');
-console.log(username)
-console.log(channelId)
+console.log(username);
+console.log(channelId);
+console.log(userId);
+
 // document.addEventListener("DOMContentLoaded", function () {
 //   const messageForm = document.getElementById("messageForm");
 //   let channelId = document.getElementById("channelId")
@@ -36,47 +41,55 @@ console.log(channelId)
 //     const messageForm = document.getElementById("messageForm");
 //     console.log("Message Form:", messageForm)
 
-  // if (messageForm) {
-    btnSendMessage.addEventListener("click", function (event) {
-      event.preventDefault();
-      const messageContent = document.getElementById("messageContent").value;
-      // console.log("Message Input:", messageContent);
-      let message = {
-        user: {
-          username: username
-        },
-        content: messageContent,
-        channel: channelId
+// if (messageForm) {
+const btnSendMessage = document.getElementById("sendMessage");
+btnSendMessage.addEventListener("click", function (event) {
+  event.preventDefault();
+  const messageContent = document.getElementById("messageContent").value;
+  // console.log("Message Input:", messageContent);
+  let message = {
+    user: {
+      username: username,
+      id: userId,
+    },
+    content: messageContent,
+    channel: {
+      id: channelId,
+      name: channelName,
+    },
+  };
+  console.log("Message Output:", message);
 
-      };
-      console.log("Message Output:", message);
+  fetch(`/api/messages/createMessage/${channelId}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(message),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      console.log(response);
+      return response.json();
+    })
+    .then((data) => {
+      // Handle the response data (the newly created Message object)
+      console.log("New message:", data);
+      // You can update the UI or perform any other operations with the new message data
     });
-      fetch(`/api/messages/createMessage/${channelId}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          message
-        }),
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          console.log(response)
-          return response.json();
-        })
-        // .then(() => {
-        //   console.log(`Message posted: ${messageContent}`);
-        //   document.getElementById("messageContent").value = "";
-        //   fetchMessages(channelId);
-        // })
-    //     .catch((error) => {
-    //       console.error("Error posting message: ", error);
-    //     });
-    // });
-    // )}
+});
+// .then(() => {
+//   console.log(`Message posted: ${messageContent}`);
+//   document.getElementById("messageContent").value = "";
+//   fetchMessages(channelId);
+// })
+//     .catch((error) => {
+//       console.error("Error posting message: ", error);
+//     });
+// });
+// )}
 
 //   const createChannelForm = document.getElementById("createChannelForm");
 

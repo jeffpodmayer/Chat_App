@@ -24,16 +24,16 @@ public class UserController {
 	
 	@GetMapping("/")
 	public String welcome(Model model) {
+		User user = new User();
+		model.addAttribute("user", user);
 		return "welcome";
 	}
 	
 	@PostMapping("/setUser")
-	public String setUser(@RequestParam String username) {
+	public String setUser(String username) {
 		User user = userService.findByUsername(username).orElse(new User());
 		user.setUsername(username);
 		user = userService.save(user);
-		
-//		session.setAttribute("user", user);
 		System.out.println(user);
 		return "redirect:/channels/" + user.getId();
 		

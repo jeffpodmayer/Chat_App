@@ -1,22 +1,30 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Channels</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Available Channels</h1>
     <ul id="channelList">
-        <li th:each="channel : ${channels}">
-            <a th:href="@{/channels/{userId}/{channelId} (channelId=${channel.id}, userId=${user.id})}" th:text="${channel.name}">Channel Name</a>
-        </li>
+      <li th:each="channel : ${channels}">
+        <a
+          th:href="@{/channels/{userId}/{channelId} (channelId=${channel.id}, userId=${user.id})}"
+          th:text="${channel.name}"
+          >Channel Name</a
+        >
+      </li>
     </ul>
-    <form id="createChannelForm" action="#" method="post">
-        <label for="channelName">Channel Name</label>
-        <input type="text" id="channelName" name="channelName" required>
-        <button type="submit">Create Channel</button>
+    <form
+      id="createChannelForm"
+      th:action="@{/channels/createChannel/{userId}(userId=${user.id})}"
+      method="post"
+    >
+      <label>Channel Name</label>
+      <input th:field="${channel.name}" type="text" id="channelName" required />
+      <button type="submit">Create Channel</button>
     </form>
     <!-- <script src="/welcome.js"></script> -->
-</body>
+  </body>
 </html>

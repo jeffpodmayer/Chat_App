@@ -41,7 +41,8 @@ public class ChannelController {
 										.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Channel not found"));
 //		System.out.println("Channel Name: " + channel.getName()); // For debugging
 		List<Message> messages = messageService.findMessagesByChannelId(channelId);
-		Optional<User> user = userService.findById(userId);
+		Optional<User> optionalUser = userService.findById(userId);
+		User user = optionalUser.get();
 	    model.addAttribute("user", user);
 		model.addAttribute("channel", channel);
 		model.addAttribute("messages", messages);
@@ -52,21 +53,29 @@ public class ChannelController {
 	@GetMapping("/channels/{userId}")
 	public String showChannels(@PathVariable Long userId, Model model) {
 	    List<Channel> channels = channelService.findAll();
-	    Optional<User> user = userService.findById(userId);
+	    Optional<User> optionalUser = userService.findById(userId);
+		User user = optionalUser.get();
+
+		Channel channel = new Channel();
+
 	    model.addAttribute("user", user);
 	    model.addAttribute("channels", channels);
+		model.addAttribute("channel", channel);
+
 	    return "channels";
 	}
 	
-//	@PostMapping("/channels")public String createChannel(@RequestParam String channelName, RedirectAttributes redirectAttributes) {
-//		Channel newChannel = new Channel();
-//		newChannel.setName(channelName);
-//		Channel savedChannel = channelService.save(newChannel);
-//		System.out.println(savedChannel.getId());
+	@PostMapping("/channels/createChannel/{userId}")
+	public String createChannel(String name, @PathVariable Long userId) {
+		Channel newChannel = new Channel();
+		newChannel.setName(name);
+		Channel savedChannel = channelService.save(newChannel);
+		System.out.println(name);
+		System.out.println(savedChannel.getId());
 //		redirectAttributes.addFlashAttribute("successMessage", "Channel '" + channelName + "' created successfully");
-//		
-//		return "redirect:/channels" + user.getId();
-//	}
+
+		return "redirect:/channels/" + userId;
+	}
 
 	
 	

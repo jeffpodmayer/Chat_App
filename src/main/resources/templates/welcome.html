@@ -5,9 +5,15 @@
   </head>
   <body>
     <h1>Welcome to the Chat App!</h1>
-    <form id="joinForm" action="/setUser" method="post">
+    <form id="joinForm" th:action="@{/setUser}" method="post">
       <label for="username">Enter your name:</label>
-      <input type="text" id="username" name="username" required />
+      <input
+        th:field="${user.username}"
+        type="text"
+        id="username"
+        name="username"
+        required
+      />
       <button type="submit">Join</button>
     </form>
     <script src="/welcome.js"></script>
