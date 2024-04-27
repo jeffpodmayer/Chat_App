@@ -41,7 +41,8 @@ public class ChannelController {
 										.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Channel not found"));
 //		System.out.println("Channel Name: " + channel.getName()); // For debugging
 		List<Message> messages = messageService.findMessagesByChannelId(channelId);
-		Optional<User> user = userService.findById(userId);
+		Optional<User> optionalUser = userService.findById(userId);
+		User user = optionalUser.get();
 	    model.addAttribute("user", user);
 		model.addAttribute("channel", channel);
 		model.addAttribute("messages", messages);
@@ -52,9 +53,12 @@ public class ChannelController {
 	@GetMapping("/channels/{userId}")
 	public String showChannels(@PathVariable Long userId, Model model) {
 	    List<Channel> channels = channelService.findAll();
-	    Optional<User> user = userService.findById(userId);
+	    Optional<User> optionalUser = userService.findById(userId);
+	    User user = optionalUser.get();
+	    Channel channel = new Channel();
 	    model.addAttribute("user", user);
 	    model.addAttribute("channels", channels);
+	    model.addAttribute("channel", channel);
 	    return "channels";
 	}
 	

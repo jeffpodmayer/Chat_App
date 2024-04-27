@@ -1,10 +1,17 @@
-const username=sessionStorage.getItem('username');
+const username = sessionStorage.getItem('username');
+const userIdInput = document.getElementById('userId');
+const userId = userIdInput.value;
 const channelIdInput = document.getElementById('channelId');
 const channelId = channelIdInput.value;
+const channelNameInput = document.getElementById('channelName');
+const channelName = channelNameInput.value;
 
-const btnSendMessage = document.getElementById('sendMessage');
-console.log(username)
-console.log(channelId)
+console.log(username);
+console.log(channelId);
+console.log(userId);
+// const btnSendMessage = document.getElementById('sendMessage');
+// console.log(username)
+// console.log(channelId)
 // document.addEventListener("DOMContentLoaded", function () {
 //   const messageForm = document.getElementById("messageForm");
 //   let channelId = document.getElementById("channelId")
@@ -37,16 +44,21 @@ console.log(channelId)
 //     console.log("Message Form:", messageForm)
 
   // if (messageForm) {
-    btnSendMessage.addEventListener("click", function (event) {
+   const btnSendMessage = document.getElementById("sendMessage");
+   btnSendMessage.addEventListener("click", function (event) {
       event.preventDefault();
       const messageContent = document.getElementById("messageContent").value;
       // console.log("Message Input:", messageContent);
       let message = {
         user: {
-          username: username
+          username: username,
+          id: userId,
         },
         content: messageContent,
-        channel: channelId
+        channel:  {
+          id: channelId,
+          name: channelName,
+        },
 
       };
       console.log("Message Output:", message);
@@ -56,9 +68,7 @@ console.log(channelId)
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          message
-        }),
+        body: JSON.stringify(message),
       })
         .then((response) => {
           if (!response.ok) {
@@ -67,8 +77,10 @@ console.log(channelId)
           console.log(response)
           return response.json();
         })
-        // .then(() => {
-        //   console.log(`Message posted: ${messageContent}`);
+        .then((data) => {
+          console.log("New message:", data);
+          // Now able to update the UI or perform any other operations with the new message data
+        });
         //   document.getElementById("messageContent").value = "";
         //   fetchMessages(channelId);
         // })

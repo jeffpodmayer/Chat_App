@@ -54,7 +54,7 @@ public class MessageApiController {
 //	}
 	
 	@PostMapping("/createMessage/{channelId}")
-	public ResponseEntity<Message> createMessage(@RequestBody Message message, @PathVariable Long channelId) {
+	public ResponseEntity<Message> createMessage(@PathVariable Long channelId, @RequestBody Message message) {
 //		User user = (User) session.getAttribute("user");
 //		if (user == null) {
 //			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not logged in");
@@ -66,11 +66,11 @@ public class MessageApiController {
 		Message newMessage = new Message();
 		newMessage.setContent(message.getContent());
 		newMessage.setChannel(channel);
-//		newMessage.setUser(channel.getUsers());
-		System.out.println(message);
-		messageService.save(message);
+		newMessage.setUser(message.getUser());
+//		System.out.println(message);
+		Message savedMessage = messageService.save(newMessage);
 		
-		return ResponseEntity.status(HttpStatus.CREATED).body(message);
+		return ResponseEntity.ok(savedMessage);
 	}
 
 	@GetMapping("/channels/{channelId}/messages")
