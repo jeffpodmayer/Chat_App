@@ -23,56 +23,55 @@ import com.coderscampus.miriamassignment14.service.UserService;
 
 @Controller
 public class ChannelController {
-	
+
 	private final ChannelService channelService;
 	private final MessageService messageService;
 	private final UserService userService;
-	
+
 	@Autowired
 	public ChannelController(ChannelService channelService, MessageService messageService, UserService userService) {
 		this.channelService = channelService;
 		this.messageService = messageService;
 		this.userService = userService;
 	}
-	
+
 	@GetMapping("/channels/{userId}/{channelId}")
 	public String viewChannel(@PathVariable Long channelId, @PathVariable Long userId, Model model) {
 		Channel channel = channelService.findById(channelId)
-										.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Channel not found"));
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Channel not found"));
 //		System.out.println("Channel Name: " + channel.getName()); // For debugging
 		List<Message> messages = messageService.findMessagesByChannelId(channelId);
 		Optional<User> optionalUser = userService.findById(userId);
 		User user = optionalUser.get();
-	    model.addAttribute("user", user);
+		model.addAttribute("user", user);
 		model.addAttribute("channel", channel);
 		model.addAttribute("messages", messages);
-		
+
 		return "channel";
 	}
-	
+
 	@GetMapping("/channels/{userId}")
 	public String showChannels(@PathVariable Long userId, Model model) {
-	    List<Channel> channels = channelService.findAll();
-	    Optional<User> optionalUser = userService.findById(userId);
-	    User user = optionalUser.get();
-	    Channel channel = new Channel();
-	    model.addAttribute("user", user);
-	    model.addAttribute("channels", channels);
-	    model.addAttribute("channel", channel);
-	    return "channels";
+		List<Channel> channels = channelService.findAll();
+		Optional<User> optionalUser = userService.findById(userId);
+		User user = optionalUser.get();
+		Channel channel = new Channel();
+		model.addAttribute("user", user);
+		model.addAttribute("channels", channels);
+		model.addAttribute("channel", channel);
+		return "channels";
 	}
-	
-//	@PostMapping("/channels")public String createChannel(@RequestParam String channelName, RedirectAttributes redirectAttributes) {
-//		Channel newChannel = new Channel();
-//		newChannel.setName(channelName);
-//		Channel savedChannel = channelService.save(newChannel);
-//		System.out.println(savedChannel.getId());
-//		redirectAttributes.addFlashAttribute("successMessage", "Channel '" + channelName + "' created successfully");
-//		
-//		return "redirect:/channels" + user.getId();
-//	}
 
-	
-	
+	@PostMapping("/channels/createChannel/{userId}")
+		public String createChannel(String name, @PathVariable Long userId) {
+		Channel newChannel = new Channel();
+		newChannel.setName(name);
+		Channel savedChannel = channelService.save(newChannel);
+		System.out.println(name);
+		System.out.println(savedChannel.getId());
+//		redirectAttributes.addFlashAttribute("successMessage", "Channel '" + channelName + "' created successfully");
+		
+		return "redirect:/channels/" + userId;
+	}
 
 }

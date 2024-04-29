@@ -53,6 +53,7 @@ public class MessageApiController {
 //		return ResponseEntity.ok().body("Message posted successfully");
 //	}
 	
+	//ask Jeff what he commented out since a little diff than below, at least in my line 74 compared to his line 68
 	@PostMapping("/createMessage/{channelId}")
 	public ResponseEntity<Message> createMessage(@PathVariable Long channelId, @RequestBody Message message) {
 //		User user = (User) session.getAttribute("user");
