@@ -68,7 +68,7 @@ public class MessageApiController {
 		newMessage.setContent(message.getContent());
 		newMessage.setChannel(channel);
 		newMessage.setUser(message.getUser());
-//		System.out.println(message);
+		System.out.println(newMessage);
 		Message savedMessage = messageService.save(newMessage);
 		
 		return ResponseEntity.ok(savedMessage);
