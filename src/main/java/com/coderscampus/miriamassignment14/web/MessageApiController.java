@@ -53,7 +53,6 @@ public class MessageApiController {
 //		return ResponseEntity.ok().body("Message posted successfully");
 //	}
 	
-	//ask Jeff what he commented out since a little diff than below, at least in my line 74 compared to his line 68
 	@PostMapping("/createMessage/{channelId}")
 	public ResponseEntity<Message> createMessage(@PathVariable Long channelId, @RequestBody Message message) {
 //		User user = (User) session.getAttribute("user");
@@ -74,6 +73,7 @@ public class MessageApiController {
 		return ResponseEntity.ok(savedMessage);
 	}
 
+	//added username field to messageDTO and modified below
 	@GetMapping("/channels/{channelId}/messages")
 	public ResponseEntity<List<MessageDTO>> getMessages(@PathVariable Long channelId) {
 		List<Message> messages = messageService.findMessagesByChannelId(channelId);
@@ -81,6 +81,9 @@ public class MessageApiController {
 			MessageDTO dto = new MessageDTO();
 			dto.setContent(message.getContent());
 			dto.setChannelId(message.getChannel().getId());
+			if(message.getUser() !=null) {
+				dto.setUsername(message.getUser().getUsername());
+			}
 			return dto;
 		}).collect(Collectors.toList());
 		return ResponseEntity.ok(messageDTOs);
