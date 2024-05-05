@@ -10,33 +10,7 @@ const messagesContainer = document.getElementById("messagesContainer");
 console.log(username);
 console.log(channelId);
 console.log(userId);
-// const btnSendMessage = document.getElementById('sendMessage');
-// console.log(username)
-// console.log(channelId)
-// document.addEventListener("DOMContentLoaded", function () {
-//   const messageForm = document.getElementById("messageForm");
-//   let channelId = document.getElementById("channelId")
-//     ? document.getElementById("channelId").value
-//     : null; // Assuming you have an element with ID 'channelId' holding the channel ID.
 
-//   function fetchMessages(channelId) {
-//     fetch(`/api/messages/channels/${channelId}`)
-//       .then((response) => response.json())
-//       .then((messages) => {
-//         const container = document.getElementById("messagesContainer");
-//         container.innerHTML = "";
-//         messages.forEach((message) => {
-//           const messageElement = document.createElement("p");
-//           messageElement.textContent = message.content;
-//           container.appendChild(messageElement);
-//         });
-//       })
-//       .catch((error) => console.error("Failed to load messages:", error));
-//   }
-
-//   if (channelId) {
-//     fetchMessages(channelId);
-//   }
 
 //added below from 42-52 to fetch all messages for the channel
 document.addEventListener("DOMContentLoaded", function () {
@@ -50,6 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
     })
     .catch((error) => console.error("Failed to load messages:", error));
 });
+
 
 // if (messageForm) {
 const btnSendMessage = document.getElementById("sendMessage");
@@ -94,24 +69,15 @@ btnSendMessage.addEventListener("click", function () {
 function fetchMessages() {
   fetch(`/api/messages/channels/${channelId}`)
     .then((response) => response.json())
-    .then((newMessages) => {
-      updateMessagesUI(newMessages);
+    .then((Messages) => {
+      messagesContainer.innerHTML = ''; 
+      messages.forEach(message => {
+        renderMessage(message);
+      });
     })
     .catch((error) => console.error("Failed to load messages:", error));
 }
 
-function updateMessagesUI(newMessages) {
-  const existingMessages = document.querySelectorAll("#messagesContainer p");
-  const messageIds = Array.from(existingMessages).map(
-    msg => msg.dataset.messageId
-  );
-
-  newMessages.forEach((message) => {
-    if (!messageIds.includes(message.id.toString())) {
-      renderMessage(message);
-    }
-  });
-}
 function renderMessage(data) {
   const div = document.createElement("div");
   //added line 97
@@ -123,48 +89,5 @@ function renderMessage(data) {
   div.innerHTML = messageHTML;
   messagesContainer.appendChild(div);
 }
-setInterval(fetchMessages, 15000);
-//   document.getElementById("messageContent").value = "";
-//   fetchMessages(channelId);
-// })
-//     .catch((error) => {
-//       console.error("Error posting message: ", error);
-//     });
-// });
-// )}
+// setInterval(fetchMessages, 5000);
 
-//   const createChannelForm = document.getElementById("createChannelForm");
-
-//   if (createChannelForm) {
-//     createChannelForm.addEventListener("submit", function (event) {
-//       event.preventDefault();
-//       const channelName = document.getElementById("channelName").value;
-
-//       fetch("/api/channels/createChannel", {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify({ channelName: channelName }),
-//       })
-//         .then((response) => {
-//           if (!response.ok) {
-//             throw new Error("Network response was not ok");
-//           }
-//           return response.json();
-//         })
-//         .then((data) => {
-//           console.log("Channel created:", channelName);
-//           document.getElementById("channelName").value = "";
-
-//           const channelList = document.getElementById("channelList");
-//           const newChannelElement = document.createElement("li");
-//           newChannelElement.textContent = data.name;
-//           channelList.appendChild(newChannelElement);
-//         })
-//         .catch((error) => {
-//           console.error("Error creating channel: ", error);
-//         });
-//     });
-//   }
-// });
