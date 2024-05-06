@@ -12,18 +12,8 @@ console.log(channelId);
 console.log(userId);
 
 
-//added below from 42-52 to fetch all messages for the channel
-document.addEventListener("DOMContentLoaded", function () {
-  const channelId = document.getElementById("channelId").value;
-  fetch(`/api/messages/channels/${channelId}/messages`)
-    .then((response) => response.json())
-    .then((messages) => {
-      messages.forEach((message) => {
-        renderMessage(message);
-      });
-    })
-    .catch((error) => console.error("Failed to load messages:", error));
-});
+//added below to fetch all messages for the channel
+
 
 
 // if (messageForm) {
@@ -60,34 +50,49 @@ btnSendMessage.addEventListener("click", function () {
     })
     .then((data) => {
       console.log("New message:", data);
-      renderMessage(data);
+      renderMessage(data.user.username, data.content);
       document.getElementById("messageContent").value = "";
     });
   // Now able to update the UI or perform any other operations with the new message data
 });
 
-function fetchMessages() {
-  fetch(`/api/messages/channels/${channelId}`)
-    .then((response) => response.json())
-    .then((Messages) => {
-      messagesContainer.innerHTML = ''; 
-      messages.forEach(message => {
-        renderMessage(message);
-      });
-    })
-    .catch((error) => console.error("Failed to load messages:", error));
-}
+// function fetchMessages() {
+//   fetch(`/api/messages/channels/${channelId}`)
+//     .then((response) => response.json())
+//     .then((Messages) => {
+//       messagesContainer.innerHTML = ''; 
+//       messages.forEach(message => {
+//         renderMessage(message);
+//       });
+//     })
+//     .catch((error) => console.error("Failed to load messages:", error));
+// }
 
-function renderMessage(data) {
+function renderMessage(username, message) {
+  // console.log(data.user.username);
   const div = document.createElement("div");
-  //added line 97
-  const username = data.username ? data.username : "Unknown user"; // Default to 'Unknown user' if user data is missing
+  // const username = data.user.username ? data.user.username : "Unknown user"; // Default to 'Unknown user' if user data is missing
   // const messageHTML = `<p>${data.user.username} : ${data.content}</p>`;
-  const messageHTML = `<p>${username} : ${data.content}</p>`;
+  const messageHTML = `<p>${username} : ${message}</p>`;
 
   console.log(messageHTML);
   div.innerHTML = messageHTML;
   messagesContainer.appendChild(div);
 }
-// setInterval(fetchMessages, 5000);
+  function getAllMessages() {
+  const channelId = document.getElementById("channelId").value;
+  fetch(`/api/messages/channels/${channelId}/messages`)
+    .then((response) => response.json())
+    .then((messages) => {
+      messages.forEach((message) => {
+        // if (message.user.id !== userId) {
+        renderMessage(message.user.username, message.content);
+        console.log(message);
+        // }
+      });
+    })
+    .catch((error) => console.error("Failed to load messages:", error));
+  };
 
+// setInterval(getAllMessages, 3000);
+document.addEventListener("DOMContentLoaded", getAllMessages);

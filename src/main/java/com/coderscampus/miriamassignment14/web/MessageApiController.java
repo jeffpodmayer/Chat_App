@@ -75,18 +75,18 @@ public class MessageApiController {
 
 	//added username field to messageDTO and modified below
 	@GetMapping("/channels/{channelId}/messages")
-	public ResponseEntity<List<MessageDTO>> getMessages(@PathVariable Long channelId) {
+	public ResponseEntity<List<Message>> getMessages(@PathVariable Long channelId) {
 		List<Message> messages = messageService.findMessagesByChannelId(channelId);
-		List<MessageDTO> messageDTOs = messages.stream().map(message -> {
-			MessageDTO dto = new MessageDTO();
-			dto.setContent(message.getContent());
-			dto.setChannelId(message.getChannel().getId());
-			if(message.getUser() !=null) {
-				dto.setUsername(message.getUser().getUsername());
-			}
-			return dto;
-		}).collect(Collectors.toList());
-		return ResponseEntity.ok(messageDTOs);
+//		List<Message> messageDTOs = messages.stream().map(message -> {
+//			MessageDTO dto = new MessageDTO();
+//			dto.setContent(message.getContent());
+//			dto.setChannelId(message.getChannel().getId());
+//			if(message.getUser() !=null) {
+//				dto.setUsername(message.getUser().getUsername());
+//			}
+//			return dto;
+//		}).collect(Collectors.toList());
+		return ResponseEntity.ok(messages);
 	}
 
 }
