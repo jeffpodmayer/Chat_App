@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -23,6 +24,7 @@ public class Channel {
 	private String name;
 
 	@OneToMany(mappedBy = "channel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JsonIgnore //ADDED JSON IGNORE TO BREAK INFINITE RECURSION
 	private Set<Message> messages = new HashSet<>();
 
 	@ManyToMany

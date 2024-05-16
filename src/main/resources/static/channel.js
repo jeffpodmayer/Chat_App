@@ -6,34 +6,33 @@ const channelId = channelIdInput.value;
 const channelNameInput = document.getElementById("channelName");
 const channelName = channelNameInput.value;
 const messagesContainer = document.getElementById("messagesContainer");
-
-console.log(username);
-console.log(channelId);
-console.log(userId);
-
-
-//added below to fetch all messages for the channel
-
-
-
-// if (messageForm) {
 const btnSendMessage = document.getElementById("sendMessage");
+const messageContentInput = document.getElementById("messageContent");
+let mostRecentMessageId = 0;
+
+// When enter is pressed this prevents the page froom submitting and instead does what the btnSendMessage event listener does
+messageContentInput.addEventListener("keydown", function (event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    btnSendMessage.click();
+  }
+});
+
+//this messsage sends and renders a message on the page, then sets the mostRecentMessageId
 btnSendMessage.addEventListener("click", function () {
-  // event.preventDefault();
-  const messageContent = document.getElementById("messageContent").value;
-  // console.log("Message Input:", messageContent);
+  const messageToSend = messageContent.value;
   let message = {
     user: {
       username: username,
       id: userId,
     },
-    content: messageContent,
+    content: messageToSend,
     channel: {
       id: channelId,
       name: channelName,
     },
   };
-  console.log("Message Output:", message);
+
   fetch(`/api/messages/createMessage/${channelId}`, {
     method: "POST",
     headers: {
@@ -51,48 +50,59 @@ btnSendMessage.addEventListener("click", function () {
     .then((data) => {
       console.log("New message:", data);
       renderMessage(data.user.username, data.content);
+      mostRecentMessageId = data.id; //Sets the mostRecentMessageId to that user sent
       document.getElementById("messageContent").value = "";
     });
-  // Now able to update the UI or perform any other operations with the new message data
 });
 
-// function fetchMessages() {
-//   fetch(`/api/messages/channels/${channelId}`)
-//     .then((response) => response.json())
-//     .then((Messages) => {
-//       messagesContainer.innerHTML = ''; 
-//       messages.forEach(message => {
-//         renderMessage(message);
-//       });
-//     })
-//     .catch((error) => console.error("Failed to load messages:", error));
-// }
-
 function renderMessage(username, message) {
-  // console.log(data.user.username);
   const div = document.createElement("div");
-  // const username = data.user.username ? data.user.username : "Unknown user"; // Default to 'Unknown user' if user data is missing
-  // const messageHTML = `<p>${data.user.username} : ${data.content}</p>`;
   const messageHTML = `<p>${username} : ${message}</p>`;
-
   console.log(messageHTML);
   div.innerHTML = messageHTML;
   messagesContainer.appendChild(div);
 }
-  function getAllMessages() {
-  const channelId = document.getElementById("channelId").value;
+
+// when a user joins a channel, this function gets all the messages related to that  channel --> called in the DOMContentLoaded eventListener
+function getAllChannelMessages() {
   fetch(`/api/messages/channels/${channelId}/messages`)
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json();
+    })
     .then((messages) => {
       messages.forEach((message) => {
-        // if (message.user.id !== userId) {
         renderMessage(message.user.username, message.content);
-        console.log(message);
-        // }
+        if (message.id > mostRecentMessageId) {
+          mostRecentMessageId = message.id;
+        }
       });
     })
     .catch((error) => console.error("Failed to load messages:", error));
-  };
+}
+document.addEventListener("DOMContentLoaded", getAllChannelMessages);
 
-// setInterval(getAllMessages, 3000);
-document.addEventListener("DOMContentLoaded", getAllMessages);
+// Checks for new messages --> this function is called by setInterval
+async function checkForNewMessages() {
+  try {
+    const response = await fetch(
+      `/api/messages/channels/${channelId}/messages?since=${mostRecentMessageId}`
+    );
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+    const newMessages = await response.json();
+    newMessages.forEach((message) => {
+      renderMessage(message.user.username, message.content);
+      if (message.id > mostRecentMessageId) {
+        mostRecentMessageId = message.id;
+      }
+    });
+  } catch (error) {
+    console.error("Failed to load new messages:", error);
+  }
+}
+setInterval(checkForNewMessages, 500);
